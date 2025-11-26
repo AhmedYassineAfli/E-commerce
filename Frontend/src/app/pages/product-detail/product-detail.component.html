@@ -1,0 +1,120 @@
+<div class="product-detail-page">
+  @if (!product) {
+  <div class="empty-state">
+    <div class="empty-content">
+      <div class="empty-icon">🔍</div>
+      <h2>Produit introuvable</h2>
+      <p>Le produit que vous recherchez n'existe pas ou a été supprimé.</p>
+      <a routerLink="/products" class="btn-back">← Retour aux produits</a>
+    </div>
+  </div>
+  } @else {
+  <!-- Background decorative elements -->
+  <div class="background-decoration"></div>
+
+  <div class="product-detail-container">
+    <!-- Product Image Section -->
+    <div class="product-image-section">
+      <div class="image-wrapper">
+        <img [src]="product.imageUrl || 'https://via.placeholder.com/800x600?text=No+Image'" [alt]="product.name"
+          class="main-image" />
+        <div class="image-overlay"></div>
+      </div>
+
+      <!-- Image gallery placeholder (for future enhancement) -->
+      <div class="thumbnail-gallery" *ngIf="product.imageUrl">
+        <div class="thumbnail active" [style.background-image]="'url(' + product.imageUrl + ')'"></div>
+      </div>
+    </div>
+
+    <!-- Product Info Section -->
+    <div class="product-info-section">
+      <div class="breadcrumb">
+        <a routerLink="/">Accueil</a>
+        <span class="separator">/</span>
+        <a routerLink="/products">Produits</a>
+        <span class="separator">/</span>
+        <span class="current">{{ product.category }}</span>
+      </div>
+
+      <div class="product-header">
+        <div class="category-badge">{{ product.category || 'Non catégorisé' }}</div>
+        <h1 class="product-title">{{ product.name }}</h1>
+        <div class="product-rating">
+          <div class="stars">
+            @for (star of [1, 2, 3, 4, 5]; track star) {
+            <span [class]="'star ' + (star <= (product.rating || 0) ? 'filled' : '')">⭐</span>
+            }
+          </div>
+          <span class="rating-value">{{ product.rating | number:'1.1-1' }}</span>
+          <span class="rating-text">({{ product.ratingCount || 0 }} avis)</span>
+        </div>
+      </div>
+
+      <div class="product-price-section">
+        <div class="price-main">
+          <span class="price-amount">{{ product.price | number:'1.0-0' }}</span>
+          <span class="price-currency">TND</span>
+        </div>
+        @if (product.originalPrice && product.originalPrice > product.price) {
+        <div class="price-original">
+          <span class="original-amount">{{ product.originalPrice | number:'1.0-0' }} TND</span>
+          <span class="discount-badge">
+            -{{ ((1 - product.price / product.originalPrice) * 100) | number:'1.0-0' }}%
+          </span>
+        </div>
+        }
+      </div>
+
+      <div class="product-description">
+        <h3>Description</h3>
+        <p>{{ product.description || 'Aucune description disponible pour ce produit.' }}</p>
+      </div>
+
+      <div class="product-features">
+        <div class="feature-item">
+          <span class="feature-icon">📦</span>
+          <div class="feature-content">
+            <strong>Stock disponible</strong>
+            <span [class]="'stock-status ' + (product.stock > 0 ? 'in-stock' : 'out-of-stock')">
+              {{ product.stock > 0 ? product.stock + ' en stock' : 'Rupture de stock' }}
+            </span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🚚</span>
+          <div class="feature-content">
+            <strong>Livraison</strong>
+            <span>Livraison gratuite en Tunisie</span>
+          </div>
+        </div>
+        <div class="feature-item">
+          <span class="feature-icon">🔄</span>
+          <div class="feature-content">
+            <strong>Retours</strong>
+            <span>Retours acceptés sous 14 jours</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-actions">
+        <button class="btn-add-cart" [disabled]="product.stock === 0" [class.disabled]="product.stock === 0"
+          (click)="addToCart()">
+          <span class="btn-icon">🛒</span>
+          <span class="btn-text">
+            {{ product.stock === 0 ? 'Rupture de stock' : 'Ajouter au panier' }}
+          </span>
+        </button>
+
+      </div>
+
+      <div class="product-footer">
+        <a routerLink="/products" class="link-back">
+          <span class="link-icon">←</span>
+          <span>Retour aux produits</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  }
+</div>

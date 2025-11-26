@@ -1,0 +1,32 @@
+/* AOS Animation Library */
+@import 'aos/dist/aos.css';
+
+/* Global theme */
+:root {
+  --bg: #f7f7f7;
+  --text: #111;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+* {
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}

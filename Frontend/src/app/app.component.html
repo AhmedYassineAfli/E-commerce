@@ -1,0 +1,73 @@
+<header *ngIf="!isLoginPage()" class="modern-navbar">
+  <div class="navbar-container">
+    <!-- Logo Animé -->
+    <a routerLink="/" class="navbar-logo">
+      <div class="logo-icon">
+        <i class="fas fa-gamepad"></i>
+      </div>
+      <div class="logo-text">
+        <span class="brand-name">Gaming</span>
+        <span class="brand-suffix">Store</span>
+      </div>
+    </a>
+
+    <!-- Navigation Links -->
+    <nav class="navbar-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-item">
+        <i class="fas fa-home"></i>
+        <span>Accueil</span>
+        <div class="nav-indicator"></div>
+      </a>
+
+      <a routerLink="/products" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-store"></i>
+        <span>Produits</span>
+        <div class="nav-indicator"></div>
+      </a>
+
+      <!-- My Orders Link (Customer only) -->
+      <a *ngIf="authService.isCustomer()" routerLink="/my-orders" routerLinkActive="active" class="nav-item">
+        <i class="fas fa-box"></i>
+        <span>Mes Commandes</span>
+        <div class="nav-indicator"></div>
+      </a>
+
+      <!-- Admin Link -->
+      <a *ngIf="authService.isAdmin()" routerLink="/admin" routerLinkActive="active" class="nav-item admin-link">
+        <i class="fas fa-shield-alt"></i>
+        <span>Dashboard</span>
+        <div class="nav-indicator"></div>
+      </a>
+    </nav>
+
+    <!-- Right Actions -->
+    <div class="navbar-actions">
+      <!-- Cart (Customer only) -->
+      <a *ngIf="authService.isCustomer()" routerLink="/cart" class="action-btn cart-btn"
+        [class.has-items]="getCartItemCount() > 0">
+        <div class="icon-wrapper">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count" *ngIf="getCartItemCount() > 0">{{ getCartItemCount() }}</span>
+        </div>
+        <span class="btn-label">Panier</span>
+      </a>
+
+      <!-- Auth Buttons -->
+      <div class="auth-buttons">
+        <a *ngIf="!isAuthenticated()" routerLink="/login" class="btn-login">
+          <i class="fas fa-user"></i>
+          <span>Connexion</span>
+        </a>
+
+        <button *ngIf="isAuthenticated()" (click)="logout()" class="btn-logout">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Déconnexion</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="main-content" [class.full-screen]="isLoginPage()" [class.full-width]="isProductsPage()">
+  <router-outlet />
+</main>

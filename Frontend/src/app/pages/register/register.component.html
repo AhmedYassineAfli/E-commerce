@@ -1,0 +1,94 @@
+<div class="register-container">
+    <!-- Background animated elements -->
+    <div class="background-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+        <div class="floating-shape shape-3"></div>
+    </div>
+
+    <!-- Glassmorphism overlay -->
+    <div class="glass-overlay"></div>
+
+    <!-- Main register card -->
+    <div class="register-card">
+        <div class="register-header">
+            <h1>
+                <span class="gradient-text">Inscription</span>
+            </h1>
+            <p>Créez votre compte client</p>
+        </div>
+
+        <form (ngSubmit)="onSubmit()" class="register-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="nom" [(ngModel)]="nom" name="nom" required placeholder="Nom"
+                            [disabled]="isLoading">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-wrapper">
+                        <span class="input-icon">👤</span>
+                        <input type="text" id="prenom" [(ngModel)]="prenom" name="prenom" required placeholder="Prénom"
+                            [disabled]="isLoading">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">📧</span>
+                    <input type="email" id="email" [(ngModel)]="email" name="email" required placeholder="Email"
+                        [disabled]="isLoading">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">🆔</span>
+                    <input type="text" id="username" [(ngModel)]="username" name="username" required
+                        placeholder="Nom d'utilisateur" [disabled]="isLoading">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">🔒</span>
+                    <input type="password" id="password" [(ngModel)]="password" name="password" required
+                        placeholder="Mot de passe" [disabled]="isLoading">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">🏠</span>
+                    <input type="text" id="adresse" [(ngModel)]="adresse" name="adresse"
+                        placeholder="Adresse (Optionnel)" [disabled]="isLoading">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="input-wrapper">
+                    <span class="input-icon">📱</span>
+                    <input type="tel" id="telephone" [(ngModel)]="telephone" name="telephone"
+                        placeholder="Téléphone (Optionnel)" [disabled]="isLoading">
+                </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="error-message">
+                <span class="error-icon">⚠️</span>
+                <span>{{ errorMessage }}</span>
+            </div>
+
+            <button type="submit" class="btn-register" [disabled]="isLoading">
+                <span *ngIf="!isLoading">S'inscrire</span>
+                <span *ngIf="isLoading">Inscription...</span>
+            </button>
+        </form>
+
+        <div class="register-footer">
+            <p>Déjà un compte ? <a routerLink="/login" class="link-login">Se connecter</a></p>
+        </div>
+    </div>
+</div>

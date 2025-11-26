@@ -1,0 +1,148 @@
+<div class="orders-management-container">
+    <div class="page-header">
+        <h1>📦 Gestion des Commandes</h1>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-info">
+                <p class="stat-label">Total Commandes</p>
+                <p class="stat-value">{{ getOrdersCount() }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">⏳</div>
+            <div class="stat-info">
+                <p class="stat-label">En attente</p>
+                <p class="stat-value">{{ getOrdersCount('PENDING') }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">✅</div>
+            <div class="stat-info">
+                <p class="stat-label">Livrées</p>
+                <p class="stat-value">{{ getOrdersCount('DELIVERED') }}</p>
+            </div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-icon">💰</div>
+            <div class="stat-info">
+                <p class="stat-label">Revenu Total</p>
+                <p class="stat-value">{{ getTotalRevenue() }} DT</p>
+            </div>
+        </div>
+
+        <div class="stat-card warning">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-info">
+                <p class="stat-label">Signalements</p>
+                <p class="stat-value">{{ getReportedCount() }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="filters-section">
+        <div class="filter-group">
+            <label for="statusFilter">Filtrer par statut:</label>
+            <select id="statusFilter" [(ngModel)]="selectedStatus" (change)="onStatusFilterChange()">
+                <option *ngFor="let option of statusOptions" [value]="option.value">
+                    {{ option.label }}
+                </option>
+            </select>
+        </div>
+
+        <div class="filter-group">
+            <label for="search">Rechercher:</label>
+            <input type="text" id="search" [(ngModel)]="searchTerm" (input)="onSearchChange()"
+                placeholder="N° commande, nom, téléphone...">
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Chargement des commandes...</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredOrders.length === 0" class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h2>Aucune commande trouvée</h2>
+        <p>Aucune commande ne correspond à vos critères de recherche</p>
+    </div>
+
+    <div *ngIf="!isLoading && filteredOrders.length > 0" class="orders-table-container">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>N° Commande</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Articles</th>
+                    <th>Montant</th>
+                    <th>Paiement</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of filteredOrders" class="order-row" [class.reported-row]="order.reported">
+                    <td class="order-id">
+                        #{{ order.id }}
+                        <span *ngIf="order.reported" class="report-badge" title="Commande signalée">⚠️</span>
+                    </td>
+                    <td>{{ order.orderDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+                    <td>
+                        <div class="customer-info">
+                            <p class="customer-name">{{ order.deliveryName }}</p>
+                            <p class="customer-phone">{{ order.deliveryPhone }}</p>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="items-summary">
+                            <p>{{ order.orderItems.length }} article(s)</p>
+                            <details class="items-details">
+                                <summary>Voir détails</summary>
+                                <div class="items-list">
+                                    <div *ngFor="let item of order.orderItems" class="item">
+                                        <img [src]="item.product.imageUrl" [alt]="item.product.designation">
+                                        <div>
+                                            <p>{{ item.product.designation }}</p>
+                                            <p class="item-qty">Qté: {{ item.quantity }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+                    </td>
+                    <td class="order-amount">{{ order.totalAmount }} DT</td>
+                    <td>
+                        <span class="payment-badge">
+                            {{ getPaymentMethodLabel(order.paymentMethod) }}
+                        </span>
+                    </td>
+                    <td>
+                        <span [class]="'status-badge ' + getStatusClass(order.status)">
+                            {{ getStatusLabel(order.status) }}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <select (change)="updateOrderStatus(order.id!, $any($event.target).value)"
+                                [value]="order.status" class="status-select">
+                                <option value="PENDING">En attente</option>
+                                <option value="CONFIRMED">Confirmée</option>
+                                <option value="PROCESSING">En traitement</option>
+                                <option value="SHIPPED">Expédiée</option>
+                                <option value="DELIVERED">Livrée</option>
+                                <option value="CANCELLED">Annulée</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

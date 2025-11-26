@@ -1,0 +1,25 @@
+<article class="card">
+  <a class="image-wrap" [routerLink]="['/products', product?.id]">
+    <img 
+      [src]="product?.imageUrl || 'https://via.placeholder.com/400x300?text=No+Image'" 
+      [alt]="product?.name" 
+      loading="lazy"
+    />
+    <span class="badge" *ngIf="(product?.stock ?? 0) > 0 && (product?.stock ?? 0) < 10">
+      Derniers {{ product?.stock }} !
+    </span>
+  </a>
+  <div class="content">
+    <div class="row">
+      <h3 class="name">{{ product?.name }}</h3>
+      <span class="price">{{ product?.price | number:'1.0-0' }} TND</span>
+    </div>
+    <p class="desc" *ngIf="product?.description">{{ product?.description }}</p>
+    <div class="row muted">
+      <span class="category">{{ product?.category || 'Non catégorisé' }}</span>
+      <span class="rating">{{ product?.rating | number:'1.1-1' }}</span>
+    </div>
+  </div>
+</article>
+
+

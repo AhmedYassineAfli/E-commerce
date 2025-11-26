@@ -1,0 +1,126 @@
+<div class="admin-products">
+  <div class="header-section">
+    <div class="header-content">
+      <h1>Gestion des Produits</h1>
+      <button class="btn-add" (click)="openAddModal()">
+        <span>+</span> Ajouter un produit
+      </button>
+    </div>
+    <a routerLink="/admin" class="btn-back">← Retour au dashboard</a>
+  </div>
+
+  <div class="products-table-container" *ngIf="products.length > 0; else noProducts">
+    <table class="products-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Image</th>
+          <th>Désignation</th>
+          <th>Catégorie</th>
+          <th>Prix (DT)</th>
+          <th>Stock</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products">
+          <td>{{ product.id }}</td>
+          <td>
+            <img [src]="product.imageUrl || 'assets/images/placeholder.jpg'" [alt]="product.name"
+              class="product-thumbnail" />
+          </td>
+          <td>
+            <strong>{{ product.name }}</strong>
+            <p class="product-description">{{ product.description }}</p>
+          </td>
+          <td>{{ product.category }}</td>
+          <td>{{ product.price | number:'1.2-2' }} TND</td>
+          <td>
+            <span [class]="'stock-badge ' + (product.stock > 0 ? 'in-stock' : 'out-of-stock')">
+              {{ product.stock }}
+            </span>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button class="btn-edit" (click)="openEditModal(product)">Modifier</button>
+              <button class="btn-delete" (click)="deleteProduct(product)">Supprimer</button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noProducts>
+    <div class="no-products">
+      <p>Aucun produit trouvé. Cliquez sur "Ajouter un produit" pour commencer.</p>
+    </div>
+  </ng-template>
+
+  <!-- Modal pour créer/modifier un produit -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ isEditing ? 'Modifier le produit' : 'Ajouter un produit' }}</h2>
+        <button class="btn-close" (click)="closeModal()">×</button>
+      </div>
+
+      <form class="product-form" (ngSubmit)="saveProduct()">
+        <div class="form-group">
+          <label for="designation">Désignation *</label>
+          <input type="text" id="designation" [(ngModel)]="formData.designation" name="designation" required
+            placeholder="Nom du produit" />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" [(ngModel)]="formData.description" name="description" rows="4"
+            placeholder="Description du produit"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="price">Prix (DT) *</label>
+            <input type="number" id="price" [(ngModel)]="formData.price" name="price" step="0.01" min="0" required
+              placeholder="0.00" />
+          </div>
+
+          <div class="form-group">
+            <label for="stock">Quantité en stock *</label>
+            <input type="number" id="stock" [(ngModel)]="formData.quantiteEnstock" name="quantiteEnstock" min="0"
+              required placeholder="0" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="imageFile">Image du produit</label>
+          <input type="file" id="imageFile" (change)="onFileSelected($event)" accept="image/*" class="file-input" />
+          <div *ngIf="formData.imageUrl" class="image-preview">
+            <img [src]="formData.imageUrl" alt="Aperçu"
+              style="max-height: 100px; margin-top: 10px; border-radius: 8px; border: 1px solid #ddd;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="categoryId">Catégorie *</label>
+          <select id="categoryId" [(ngModel)]="formData.categoryId" name="categoryId" required>
+            <option value="0">Sélectionner une catégorie</option>
+            <option *ngFor="let category of categories" [value]="category.idCategory">
+              {{ category.libelleCat }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="date">Date</label>
+          <input type="date" id="date" [(ngModel)]="formData.date" name="date" required />
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn-cancel" (click)="closeModal()">Annuler</button>
+          <button type="submit" class="btn-save">{{ isEditing ? 'Mettre à jour' : 'Créer' }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

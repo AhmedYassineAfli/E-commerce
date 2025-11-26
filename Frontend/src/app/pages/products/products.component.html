@@ -1,0 +1,122 @@
+<div class="products-page-modern">
+  <!-- Hero Header with Gradient -->
+  <header class="page-hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content-wrapper">
+      <div class="breadcrumb">
+        <a routerLink="/">Accueil</a>
+        <span class="separator">›</span>
+        <span>Produits</span>
+      </div>
+      <h1 class="page-title" data-aos="fade-up">Nos Produits</h1>
+      <p class="page-subtitle" data-aos="fade-up" data-aos-delay="100">
+        Découvrez notre collection premium de produits gaming et tech
+      </p>
+      <div class="stats-row" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat">
+          <span class="stat-number">{{ products.length }}</span>
+          <span class="stat-label">Produits</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">{{ categoryOptions.length }}</span>
+          <span class="stat-label">Catégories</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Qualité</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <!-- Modern Toolbar -->
+    <section class="toolbar-modern" data-aos="fade-down">
+      <div class="search-container">
+        <i class="fas fa-search search-icon-modern"></i>
+        <input class="search-input-modern" [(ngModel)]="query" placeholder="Rechercher un produit..." type="search" />
+      </div>
+
+      <div class="filters-container">
+        <div class="filter-item">
+          <i class="fas fa-folder filter-icon"></i>
+          <select class="select-modern" [(ngModel)]="selectedCategoryId" (ngModelChange)="onCategoryChange()">
+            <option [ngValue]="null">Toutes catégories</option>
+            @for (c of categoryOptions; track c.id) {
+            <option [ngValue]="c.id">{{ c.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="filter-item">
+          <i class="fas fa-sort filter-icon"></i>
+          <select class="select-modern" [(ngModel)]="sortKey">
+            <option value="name">Nom (A-Z)</option>
+            <option value="price">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="view-toggle">
+        <button class="toggle-btn active">
+          <i class="fas fa-th"></i>
+        </button>
+        <button class="toggle-btn">
+          <i class="fas fa-list"></i>
+        </button>
+      </div>
+    </section>
+
+    <!-- Products Grid -->
+    @if (filtered().length > 0) {
+    <section class="products-grid-modern">
+      @for (p of filtered(); track p.id) {
+      <div class="product-card-modern" data-aos="fade-up" [attr.data-aos-delay]="$index * 50">
+        <div class="product-badge-modern" *ngIf="p.discount && p.discount > 0">
+          <span>-{{ p.discount }}%</span>
+        </div>
+        <div class="product-image-wrapper">
+          <img [src]="p.imageUrl || 'assets/images/placeholder.jpg'" [alt]="p.name" class="product-img">
+          <div class="product-overlay-modern">
+            <button class="action-btn-modern" [routerLink]="['/products', p.id]" title="Voir les détails">
+              <i class="far fa-eye"></i>
+            </button>
+            <button class="action-btn-modern" title="Ajouter au panier" (click)="addToCart(p)">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-details-modern">
+          <div class="product-category-modern">{{ p.category || 'Tech' }}</div>
+          <h3 class="product-name-modern">
+            <a [routerLink]="['/products', p.id]">{{ p.name }}</a>
+          </h3>
+          <div class="product-price-wrapper">
+            <span class="current-price-modern">{{ (p.discount && p.discount > 0 ? (p.price * (1 - p.discount / 100)) :
+              p.price) | number:'1.0-0' }} TND</span>
+            <span class="original-price-modern" *ngIf="p.discount && p.discount > 0">{{ p.price | number:'1.0-0' }}
+              TND</span>
+          </div>
+        </div>
+      </div>
+      }
+    </section>
+    }
+
+    <!-- No Results -->
+    @if (filtered().length === 0) {
+    <div class="no-results" data-aos="fade-up">
+      <div class="no-results-icon">
+        <i class="fas fa-search"></i>
+      </div>
+      <h3>Aucun produit trouvé</h3>
+      <p>Nous n'avons trouvé aucun produit correspondant à votre recherche.</p>
+      <button class="btn-reset" (click)="query = ''; selectedCategoryId = null">
+        <i class="fas fa-redo"></i>
+        <span>Réinitialiser les filtres</span>
+      </button>
+    </div>
+    }
+  </div>
+</div>

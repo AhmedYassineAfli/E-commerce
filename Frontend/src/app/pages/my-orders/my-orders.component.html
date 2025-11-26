@@ -1,0 +1,87 @@
+<div class="orders-container">
+    <div class="orders-header">
+        <h1>📦 Mes Commandes</h1>
+        <a routerLink="/products" class="btn-shop">Continuer mes achats</a>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Chargement de vos commandes...</p>
+    </div>
+
+    <div *ngIf="!isLoading && orders.length === 0" class="empty-orders">
+        <div class="empty-icon">📦</div>
+        <h2>Aucune commande</h2>
+        <p>Vous n'avez pas encore passé de commande</p>
+        <a routerLink="/products" class="btn-shop-large">Découvrir nos produits</a>
+    </div>
+
+    <div *ngIf="!isLoading && orders.length > 0" class="orders-list">
+        <div *ngFor="let order of orders" class="order-card">
+            <div class="order-header">
+                <div class="order-info">
+                    <h3>Commande #{{ order.id }}</h3>
+                    <p class="order-date">{{ order.orderDate | date: 'dd/MM/yyyy HH:mm' }}</p>
+                </div>
+                <div class="order-status">
+                    <span [class]="'status-badge ' + getStatusClass(order.status)">
+                        {{ getStatusLabel(order.status) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="order-items">
+                <div *ngFor="let item of order.orderItems" class="order-item">
+                    <img [src]="item.product.imageUrl" [alt]="item.product.designation">
+                    <div class="item-details">
+                        <p class="item-name">{{ item.product.designation }}</p>
+                        <p class="item-qty">Quantité: {{ item.quantity }}</p>
+                    </div>
+                    <p class="item-price">{{ item.subtotal }} DT</p>
+                </div>
+            </div>
+
+            <div class="order-details">
+                <div class="detail-row">
+                    <span class="label">💳 Mode de paiement:</span>
+                    <span>{{ getPaymentMethodLabel(order.paymentMethod) }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">📍 Adresse de livraison:</span>
+                    <span>{{ order.deliveryAddress }}</span>
+                </div>
+                <div class="detail-row">
+                    <span class="label">📞 Téléphone:</span>
+                    <span>{{ order.deliveryPhone }}</span>
+                </div>
+                <div *ngIf="order.notes" class="detail-row">
+                    <span class="label">📝 Notes:</span>
+                    <span>{{ order.notes }}</span>
+                </div>
+            </div>
+
+            <div class="order-footer">
+                <div class="order-total">
+                    <span>Total</span>
+                    <span class="amount">{{ order.totalAmount }} DT</span>
+                </div>
+
+                <div class="order-actions">
+                    <button *ngIf="canCancelOrder(order.status)" (click)="cancelOrder(order.id!)" class="btn-cancel">
+                        Annuler la commande
+                    </button>
+
+                    <button *ngIf="canReportOrder(order)" (click)="reportOrder(order.id!)" class="btn-report">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Signaler un problème
+                    </button>
+
+                    <div *ngIf="order.reported" class="report-status">
+                        <i class="fas fa-check-circle"></i>
+                        Signalement envoyé
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

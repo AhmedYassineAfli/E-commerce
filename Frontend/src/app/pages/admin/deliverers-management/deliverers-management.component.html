@@ -1,0 +1,119 @@
+<div class="deliverers-management">
+    <div class="page-header">
+        <h1><i class="fas fa-truck"></i> Gestion des Livreurs</h1>
+        <button class="btn-create" (click)="openCreateModal()">
+            <i class="fas fa-plus"></i> Nouveau Livreur
+        </button>
+    </div>
+
+    <div *ngIf="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Chargement...
+    </div>
+
+    <div *ngIf="!loading" class="deliverers-grid">
+        <div *ngIf="deliverers.length === 0" class="no-deliverers">
+            <i class="fas fa-inbox"></i>
+            <p>Aucun livreur enregistré</p>
+            <button class="btn-create" (click)="openCreateModal()">
+                <i class="fas fa-plus"></i> Créer le premier livreur
+            </button>
+        </div>
+
+        <div *ngFor="let deliverer of deliverers" class="deliverer-card">
+            <div class="deliverer-header">
+                <div class="deliverer-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="deliverer-info">
+                    <h3>{{ deliverer.prenom }} {{ deliverer.nom }}</h3>
+                    <span class="deliverer-username">{{ '@' + deliverer.username }}</span>
+                </div>
+            </div>
+
+            <div class="deliverer-details">
+                <div class="detail-row">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ deliverer.email }}</span>
+                </div>
+                <div class="detail-row">
+                    <i class="fas fa-phone"></i>
+                    <span>{{ deliverer.telephone }}</span>
+                </div>
+                <div class="detail-row">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>{{ deliverer.adresse }}</span>
+                </div>
+            </div>
+
+            <div class="deliverer-actions">
+                <button class="btn-edit" (click)="openEditModal(deliverer)">
+                    <i class="fas fa-edit"></i> Modifier
+                </button>
+                <button class="btn-delete" (click)="deleteDeliverer(deliverer)">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="showModal" class="modal-overlay" (click)="closeModal()">
+        <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+                <h2>{{ isEditMode ? 'Modifier' : 'Nouveau' }} Livreur</h2>
+                <button class="btn-close" (click)="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <form (ngSubmit)="submitForm()" class="deliverer-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nom *</label>
+                        <input type="text" [(ngModel)]="delivererForm.nom" name="nom" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Prénom *</label>
+                        <input type="text" [(ngModel)]="delivererForm.prenom" name="prenom" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nom d'utilisateur *</label>
+                        <input type="text" [(ngModel)]="delivererForm.username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" [(ngModel)]="delivererForm.email" name="email" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" [(ngModel)]="delivererForm.telephone" name="telephone">
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe {{ isEditMode ? '(laisser vide pour ne pas changer)' : '*' }}</label>
+                        <input type="password" [(ngModel)]="delivererForm.password" name="password"
+                            [required]="!isEditMode">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Adresse</label>
+                    <input type="text" [(ngModel)]="delivererForm.adresse" name="adresse">
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" (click)="closeModal()">
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn-submit">
+                        <i class="fas fa-save"></i> {{ isEditMode ? 'Modifier' : 'Créer' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

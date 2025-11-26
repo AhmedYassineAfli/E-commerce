@@ -1,0 +1,135 @@
+<div class="deliverer-dashboard">
+    <div class="dashboard-header">
+        <h1><i class="fas fa-truck"></i> Tableau de Bord Livreur</h1>
+        <button class="btn-refresh" (click)="loadOrders()">
+            <i class="fas fa-sync-alt"></i> Actualiser
+        </button>
+    </div>
+
+    <!-- Loading -->
+    <div *ngIf="loading" class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Chargement...
+    </div>
+
+    <!-- Commandes Disponibles -->
+    <section class="orders-section">
+        <h2><i class="fas fa-box"></i> Commandes Disponibles ({{ availableOrders.length }})</h2>
+
+        <div *ngIf="availableOrders.length === 0" class="no-orders">
+            <i class="fas fa-inbox"></i>
+            <p>Aucune commande disponible pour le moment</p>
+        </div>
+
+        <div class="orders-grid">
+            <div *ngFor="let order of availableOrders" class="order-card">
+                <div class="order-header">
+                    <span class="order-id">#{{ order.id }}  <span>
+                            <ng-container *ngIf="order.orderItems?.length; else noItems">
+                                <ng-container *ngFor="let it of order.orderItems; let last = last">
+                                    {{ it.product?.designation || it.product?.name || 'Produit' }} (x{{ it.quantity }})<span *ngIf="!last">, </span>
+                                </ng-container>
+                            </ng-container>
+                            <ng-template #noItems>—</ng-template>
+                        </span></span>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(order.status)">
+                        {{ getStatusLabel(order.status) }}
+                    </span>
+                </div>
+
+                <div class="order-details">
+                    <div class="detail-row">
+                        <i class="fas fa-user"></i>
+                        <span>{{ order.deliveryName }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ order.deliveryAddress }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-phone"></i>
+                        <span>{{ order.deliveryPhone }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>{{ order.totalAmount | number:'1.0-0' }} TND</span>
+                    </div>
+                    
+                </div>
+
+                <div class="order-actions">
+                    <button class="btn-accept" (click)="acceptOrder(order.id)">
+                        <i class="fas fa-check"></i> Accepter
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mes Commandes -->
+    <section class="orders-section">
+        <h2><i class="fas fa-clipboard-list"></i> Mes Commandes ({{ myOrders.length }})</h2>
+
+        <div *ngIf="myOrders.length === 0" class="no-orders">
+            <i class="fas fa-inbox"></i>
+            <p>Vous n'avez aucune commande assignée</p>
+        </div>
+
+        <div class="orders-grid">
+            <div *ngFor="let order of myOrders" class="order-card">
+                <div class="order-header">
+                    <span class="order-id">#{{ order.id }}</span>
+                    <span class="badge" [ngClass]="getStatusBadgeClass(order.status)">
+                        {{ getStatusLabel(order.status) }}
+                    </span>
+                </div>
+
+                <div class="order-details">
+                    <div class="detail-row">
+                        <i class="fas fa-user"></i>
+                        <span>{{ order.deliveryName }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>{{ order.deliveryAddress }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-phone"></i>
+                        <span>{{ order.deliveryPhone }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-money-bill-wave"></i>
+                        <span>{{ order.totalAmount | number:'1.0-0' }} TND</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-tag"></i>
+                        <span>
+                            <ng-container *ngIf="order.orderItems?.length; else noItems2">
+                                <ng-container *ngFor="let it of order.orderItems; let last = last">
+                                    {{ it.product?.designation || it.product?.name || 'Produit' }} (x{{ it.quantity }})<span *ngIf="!last">, </span>
+                                </ng-container>
+                            </ng-container>
+                            <ng-template #noItems2>—</ng-template>
+                        </span>
+                    </div>
+                    <div class="detail-row" *ngIf="order.notes">
+                        <i class="fas fa-sticky-note"></i>
+                        <span>{{ order.notes }}</span>
+                    </div>
+                </div>
+
+                <div class="order-actions">
+                    <button *ngIf="order.status === 'ASSIGNED'" class="btn-start" (click)="startDelivery(order.id)">
+                        <i class="fas fa-play"></i> Commencer
+                    </button>
+                    <button *ngIf="order.status === 'DELIVERING'" class="btn-confirm"
+                        (click)="confirmDelivery(order.id)">
+                        <i class="fas fa-check-circle"></i> Check-in
+                    </button>
+                    <span *ngIf="order.status === 'DELIVERED'" class="delivered-label">
+                        <i class="fas fa-check-double"></i> Livrée
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

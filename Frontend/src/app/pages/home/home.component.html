@@ -1,0 +1,319 @@
+<div class="modern-container">
+  <!-- Hero Section with Parallax Effect -->
+  <section class="hero-modern">
+    <div class="hero-bg-overlay"></div>
+    <div class="hero-particles"></div>
+    <div class="hero-grid">
+      <div class="hero-content-modern" data-aos="fade-right">
+        <span class="hero-badge">
+          <i class="fas fa-gamepad"></i> Gaming & Tech Store
+        </span>
+        <h1 class="hero-title-modern">
+          Découvrez l'Excellence
+          <span class="gradient-text">Technologique</span>
+        </h1>
+        <p class="hero-subtitle-modern">
+          Des produits high-tech premium sélectionnés pour vous offrir la meilleure expérience gaming et tech
+        </p>
+        <div class="hero-stats">
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="100">
+            <div class="stat-number"><i class="fas fa-box"></i> 500+</div>
+            <div class="stat-label">Produits</div>
+          </div>
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="200">
+            <div class="stat-number"><i class="fas fa-users"></i> 10K+</div>
+            <div class="stat-label">Clients</div>
+          </div>
+          <div class="stat-item" data-aos="fade-up" data-aos-delay="300">
+            <div class="stat-number"><i class="fas fa-clock"></i> 24/7</div>
+            <div class="stat-label">Support</div>
+          </div>
+        </div>
+        <div class="hero-cta-modern" data-aos="fade-up" data-aos-delay="400">
+          <a routerLink="/products" class="btn-modern btn-primary">
+            <i class="fas fa-shopping-bag"></i>
+            <span>Explorer la boutique</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+          <a href="#featured" class="btn-modern btn-secondary">
+            <i class="fas fa-fire"></i>
+            <span>Meilleures ventes</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-aos="fade-left">
+        <div class="floating-card card-1">
+          <i class="fas fa-laptop"></i>
+          <span>Gaming Laptops</span>
+        </div>
+        <div class="floating-card card-2">
+          <i class="fas fa-mobile-alt"></i>
+          <span>Smartphones</span>
+        </div>
+        <div class="floating-card card-3">
+          <i class="fas fa-headphones"></i>
+          <span>Audio Premium</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="features-modern">
+    <div class="features-grid-modern">
+      <div class="feature-card-modern" data-aos="zoom-in" data-aos-delay="100">
+        <div class="feature-icon-modern">
+          <div class="icon-circle">
+            <i class="fas fa-shipping-fast"></i>
+          </div>
+        </div>
+        <h3>Livraison Express</h3>
+        <p>Livraison gratuite en 24-48h partout en Tunisie</p>
+      </div>
+      <div class="feature-card-modern" data-aos="zoom-in" data-aos-delay="200">
+        <div class="feature-icon-modern">
+          <div class="icon-circle">
+            <i class="fas fa-shield-alt"></i>
+          </div>
+        </div>
+        <h3>Paiement Sécurisé</h3>
+        <p>Transactions 100% sécurisées avec cryptage SSL</p>
+      </div>
+      <div class="feature-card-modern" data-aos="zoom-in" data-aos-delay="300">
+        <div class="feature-icon-modern">
+          <div class="icon-circle">
+            <i class="fas fa-undo"></i>
+          </div>
+        </div>
+        <h3>Retour Gratuit</h3>
+        <p>14 jours pour changer d'avis sans frais</p>
+      </div>
+      <div class="feature-card-modern" data-aos="zoom-in" data-aos-delay="400">
+        <div class="feature-icon-modern">
+          <div class="icon-circle">
+            <i class="fas fa-headset"></i>
+          </div>
+        </div>
+        <h3>Support 24/7</h3>
+        <p>Une équipe dédiée à votre service</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-modern">
+    <div class="section-header-modern" data-aos="fade-up">
+      <span class="section-badge"><i class="fas fa-th-large"></i> Nos Catégories</span>
+      <h2 class="section-title-modern">Explorez par Catégorie</h2>
+      <p class="section-subtitle">Trouvez exactement ce que vous cherchez</p>
+    </div>
+    <div class="categories-grid-modern">
+      @for (c of categories; track c.id) {
+      <a class="category-card-modern" [routerLink]="['/products']" [queryParams]="{ categoryId: c.id }"
+        data-aos="flip-left" [attr.data-aos-delay]="$index * 100">
+        <div class="category-icon-modern">
+          <i class="fas fa-tv" *ngIf="c.name.toLowerCase().includes('tv')"></i>
+          <i class="fas fa-mobile-alt"
+            *ngIf="c.name.toLowerCase().includes('phone') || c.name.toLowerCase().includes('smartphone')"></i>
+          <i class="fas fa-print" *ngIf="c.name.toLowerCase().includes('imprimante')"></i>
+          <i class="fas fa-laptop"
+            *ngIf="c.name.toLowerCase().includes('ordinateur') || c.name.toLowerCase().includes('pc')"></i>
+          <i class="fas fa-gamepad"
+            *ngIf="!c.name.toLowerCase().includes('tv') && !c.name.toLowerCase().includes('phone') && !c.name.toLowerCase().includes('smartphone') && !c.name.toLowerCase().includes('imprimante') && !c.name.toLowerCase().includes('ordinateur') && !c.name.toLowerCase().includes('pc')"></i>
+        </div>
+        <h3>{{ c.name }}</h3>
+        <span class="category-arrow">
+          <i class="fas fa-arrow-right"></i>
+        </span>
+      </a>
+      }
+    </div>
+  </section>
+
+  <section class="products-modern" id="featured">
+    <div class="section-header-modern" data-aos="fade-up">
+      <span class="section-badge"><i class="fas fa-star"></i> Meilleures Ventes</span>
+      <h2 class="section-title-modern">Produits Populaires</h2>
+      <p class="section-subtitle">Les produits les plus appréciés par nos clients</p>
+    </div>
+    <div class="products-grid-modern">
+      @for (p of featured; track p.id) {
+      <div class="product-card-modern" data-aos="fade-up" [attr.data-aos-delay]="$index * 100">
+        <div class="product-badge-modern" *ngIf="p.discount && p.discount > 0">
+          <span>-{{ p.discount }}%</span>
+        </div>
+        <div class="product-image-modern">
+          <img [src]="p.imageUrl || 'assets/images/placeholder.jpg'" [alt]="p.name" (load)="onImageLoad($event)"
+            style="opacity: 0; transition: opacity 0.3s ease;">
+          <div class="product-overlay">
+            <button class="action-btn-modern" (click)="quickView(p)" title="Aperçu rapide">
+              <i class="far fa-eye"></i>
+            </button>
+            <button class="action-btn-modern" (click)="addToCart(p)" title="Ajouter au panier">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
+        </div>
+        <div class="product-info-modern">
+          <div class="product-category">{{ p.category || 'Tech' }}</div>
+          <h3 class="product-title-modern">
+            <a [routerLink]="['/products', p.id]">{{ p.name }}</a>
+          </h3>
+          <div class="product-price-modern">
+            <span class="current-price">{{ (p.discount && p.discount > 0 ? (p.price * (1 - p.discount / 100)) : p.price)
+              | number:'1.0-0' }} TND</span>
+            <span class="original-price" *ngIf="p.discount && p.discount > 0">{{ p.price | number:'1.0-0' }} TND</span>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+    <div class="view-all-container" data-aos="fade-up">
+      <a routerLink="/products" class="btn-modern btn-outline">
+        <i class="fas fa-th"></i>
+        <span>Voir tous les produits</span>
+        <i class="fas fa-arrow-right"></i>
+      </a>
+    </div>
+  </section>
+
+  <section class="newsletter-modern" data-aos="fade-up">
+    <div class="newsletter-content-modern">
+      <div class="newsletter-icon">
+        <i class="fas fa-envelope"></i>
+      </div>
+      <div class="newsletter-text-modern">
+        <h2>Restez Informé</h2>
+        <p>Inscrivez-vous à notre newsletter pour recevoir les dernières offres et nouveautés</p>
+      </div>
+      <form class="newsletter-form-modern" (ngSubmit)="subscribeNewsletter()">
+        <div class="input-group-modern">
+          <i class="fas fa-envelope"></i>
+          <input type="email" [(ngModel)]="email" name="email" placeholder="Votre adresse email" required>
+        </div>
+        <button type="submit" class="btn-modern btn-primary">
+          <span>S'abonner</span>
+          <i class="fas fa-paper-plane"></i>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <footer class="footer-modern">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-column" data-aos="fade-up" data-aos-delay="100">
+          <div class="footer-logo">
+            <i class="fas fa-gamepad"></i>
+            <span>Gaming Store</span>
+          </div>
+          <p class="footer-description">
+            Votre destination premium pour les produits gaming et tech de haute qualité.
+            Nous offrons les meilleures marques aux meilleurs prix.
+          </p>
+          <div class="social-links">
+            <a href="#" class="social-link" title="Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </a>
+            <a href="#" class="social-link" title="Twitter">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" class="social-link" title="Instagram">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" class="social-link" title="YouTube">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-column" data-aos="fade-up" data-aos-delay="200">
+          <h3 class="footer-title">Liens Rapides</h3>
+          <ul class="footer-links">
+            <li><a routerLink="/"><i class="fas fa-home"></i> Accueil</a></li>
+            <li><a routerLink="/products"><i class="fas fa-shopping-bag"></i> Produits</a></li>
+            <li><a routerLink="/cart"><i class="fas fa-shopping-cart"></i> Panier</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column" data-aos="fade-up" data-aos-delay="300">
+          <h3 class="footer-title">Service Client</h3>
+          <ul class="footer-links">
+            <li><a href="#"><i class="fas fa-question-circle"></i> FAQ</a></li>
+            <li><a href="#"><i class="fas fa-truck"></i> Livraison</a></li>
+            <li><a href="#"><i class="fas fa-undo"></i> Retours</a></li>
+            <li><a href="#"><i class="fas fa-shield-alt"></i> Garantie</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-column" data-aos="fade-up" data-aos-delay="400">
+          <h3 class="footer-title">Contact</h3>
+          <ul class="footer-contact">
+            <li>
+              <i class="fas fa-map-marker-alt"></i>
+              <span>Tunis, Tunisie</span>
+            </li>
+            <li>
+              <i class="fas fa-phone"></i>
+              <span>+216 XX XXX XXX</span>
+            </li>
+            <li>
+              <i class="fas fa-envelope"></i>
+              <span>contact&#64;gamingstore.tn</span>
+            </li>
+            <li>
+              <i class="fas fa-clock"></i>
+              <span>Lun - Sam: 9h - 18h</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2025 Gaming Store. Tous droits réservés.</p>
+        <div class="footer-bottom-links">
+          <a href="#">Conditions d'utilisation</a>
+          <span class="separator">•</span>
+          <a href="#">Politique de confidentialité</a>
+          <span class="separator">•</span>
+          <a href="#">Mentions légales</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<div class="modal-overlay" *ngIf="selectedProduct" (click)="closeQuickView()">
+  <div class="modal-content-modern" (click)="$event.stopPropagation()" data-aos="zoom-in">
+    <button class="modal-close" (click)="closeQuickView()">×</button>
+    <div class="modal-body-modern">
+      <div class="modal-image-modern">
+        <img [src]="selectedProduct.imageUrl || 'assets/images/placeholder.jpg'" [alt]="selectedProduct.name">
+      </div>
+      <div class="modal-details-modern">
+        <div class="modal-category">{{ selectedProduct.category || 'Tech' }}</div>
+        <h2>{{ selectedProduct.name }}</h2>
+        <div class="modal-price-modern">
+          <span class="current-price">{{ (selectedProduct.discount && selectedProduct.discount > 0 ?
+            (selectedProduct.price * (1 - selectedProduct.discount / 100)) : selectedProduct.price) | number:'1.0-0' }}
+            TND</span>
+          <span class="original-price" *ngIf="selectedProduct.discount && selectedProduct.discount > 0">{{
+            selectedProduct.price | number:'1.0-0' }} TND</span>
+          <span class="discount-badge" *ngIf="selectedProduct.discount && selectedProduct.discount > 0">-{{
+            selectedProduct.discount }}%</span>
+        </div>
+        <p class="modal-description">{{ selectedProduct.description || 'Produit de haute qualité avec les dernières
+          technologies' }}</p>
+        <div class="modal-actions-modern">
+          <button class="btn-modern btn-primary btn-large" (click)="addToCart(selectedProduct)">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Ajouter au panier</span>
+          </button>
+          <a [routerLink]="['/products', selectedProduct.id]" class="btn-modern btn-outline" (click)="closeQuickView()">
+            <span>Voir les détails</span>
+            <i class="fas fa-arrow-right"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

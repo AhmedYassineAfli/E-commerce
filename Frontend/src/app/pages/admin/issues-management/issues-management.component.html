@@ -1,0 +1,85 @@
+<div class="issues-management-container">
+    <div class="page-header">
+        <h1>⚠️ Gestion des Signalements</h1>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+        <div class="spinner"></div>
+        <p>Chargement des signalements...</p>
+    </div>
+
+    <div *ngIf="!isLoading && issues.length === 0" class="empty-state">
+        <div class="empty-icon">✅</div>
+        <h2>Aucun signalement</h2>
+        <p>Tout va bien ! Aucun problème n'a été signalé.</p>
+    </div>
+
+    <div *ngIf="!isLoading && issues.length > 0" class="issues-list">
+        <div *ngFor="let issue of issues" class="issue-card">
+            <div class="issue-header">
+                <div class="issue-id">
+                    <span class="label">Commande #{{ issue.id }}</span>
+                    <span class="date">{{ issue.signal?.reportDate | date:'dd/MM/yyyy HH:mm' }}</span>
+                </div>
+                <div class="issue-status">
+                    <span [class]="'status-badge ' + getStatusClass(issue.status)">
+                        {{ getStatusLabel(issue.status) }}
+                    </span>
+                </div>
+            </div>
+
+            <div class="issue-content">
+                <div class="customer-details">
+                    <h3>Client</h3>
+                    <p><strong>Nom:</strong> {{ issue.deliveryName }}</p>
+                    <p><strong>Tél:</strong> {{ issue.deliveryPhone }}</p>
+                </div>
+
+                <div class="report-details">
+                    <h3>Détails du problème</h3>
+                    <div class="reason-box">
+                        <p *ngIf="issue.signal">{{ issue.signal.reason }}</p>
+                        <p *ngIf="!issue.signal" class="text-muted"><em>Détails non disponibles (Ancien format de
+                                signalement)</em></p>
+                    </div>
+
+                    <div *ngIf="issue.signal?.image" class="proof-section">
+                        <h4>Preuve fournie:</h4>
+                        <div class="image-wrapper" (click)="openImage(issue.signal!.image)">
+                            <img [src]="issue.signal?.image" alt="Preuve">
+                            <div class="overlay">
+                                <span>Voir en grand</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-items">
+                    <h3>Articles concernés</h3>
+                    <div class="items-grid">
+                        <div *ngFor="let item of issue.orderItems" class="mini-item">
+                            <img [src]="item.product.imageUrl" [alt]="item.product.designation">
+                            <span>x{{ item.quantity }} {{ item.product.designation }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="issue-actions">
+                <div class="action-group">
+                    <label>Mettre à jour le statut:</label>
+                    <select (change)="updateOrderStatus(issue.id!, $any($event.target).value)" [value]="issue.status"
+                        class="status-select">
+                        <option value="PENDING">En attente</option>
+                        <option value="CONFIRMED">Confirmée</option>
+                        <option value="PROCESSING">En traitement</option>
+                        <option value="SHIPPED">Expédiée</option>
+                        <option value="DELIVERED">Livrée</option>
+                        <option value="CANCELLED">Annulée</option>
+                    </select>
+                </div>
+                <button class="btn-delete" (click)="deleteOrder(issue.id!)">Supprimer la commande</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+<div class="admin-discounts">
+    <div class="page-header">
+        <div class="header-content">
+            <button class="btn-back" routerLink="/admin">
+                <i class="fas fa-arrow-left"></i>
+                Retour
+            </button>
+            <div class="header-title">
+                <h1>Gestion des Remises</h1>
+                <p>Appliquez des remises en pourcentage sur vos produits</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-wrapper">
+        <div class="toolbar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" [(ngModel)]="searchQuery" placeholder="Rechercher un produit..."
+                    (input)="filterProducts()" />
+            </div>
+            <div class="filter-group">
+                <select [(ngModel)]="selectedCategory" (change)="filterProducts()" class="select-filter">
+                    <option [value]="null">Toutes les catégories</option>
+                    @for (cat of categories; track cat.id) {
+                    <option [value]="cat.id">{{ cat.name }}</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="products-table-container">
+            <table class="products-table">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Produit</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Remise Actuelle</th>
+                        <th>Nouvelle Remise</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (product of filteredProducts; track product.id) {
+                    <tr>
+                        <td>
+                            <div class="product-image">
+                                <img [src]="product.imageUrl || 'assets/images/placeholder.jpg'" [alt]="product.name">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="product-info">
+                                <span class="product-name">{{ product.name }}</span>
+                                <span class="product-desc">{{ product.description | slice:0:50 }}...</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="category-badge">{{ product.category || 'N/A' }}</span>
+                        </td>
+                        <td>
+                            <span class="price">{{ product.price | number:'1.0-0' }} TND</span>
+                        </td>
+                        <td>
+                            <div class="current-discount">
+                                @if (product.discount && product.discount > 0) {
+                                <span class="discount-badge active">-{{ product.discount }}%</span>
+                                } @else {
+                                <span class="discount-badge inactive">Aucune</span>
+                                }
+                            </div>
+                        </td>
+                        <td>
+                            <div class="discount-input-group">
+                                <input type="number" min="0" max="100" [(ngModel)]="product.newDiscount" placeholder="0"
+                                    class="discount-input" />
+                                <span class="percent-symbol">%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="btn-apply" (click)="applyDiscount(product)"
+                                    [disabled]="product.newDiscount === undefined || product.newDiscount === null">
+                                    <i class="fas fa-check"></i>
+                                    Appliquer
+                                </button>
+                                @if (product.discount && product.discount > 0) {
+                                <button class="btn-remove" (click)="removeDiscount(product)">
+                                    <i class="fas fa-times"></i>
+                                    Retirer
+                                </button>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (filteredProducts.length === 0) {
+            <div class="no-products">
+                <i class="fas fa-box-open"></i>
+                <p>Aucun produit trouvé</p>
+            </div>
+            }
+        </div>
+
+        <div class="bulk-actions">
+            <div class="bulk-input-group">
+                <label>Appliquer une remise globale :</label>
+                <div class="input-with-btn">
+                    <input type="number" min="0" max="100" [(ngModel)]="bulkDiscount" placeholder="Ex: 20"
+                        class="bulk-discount-input" />
+                    <span class="percent-symbol">%</span>
+                    <button class="btn-bulk-apply" (click)="applyBulkDiscount()"
+                        [disabled]="!bulkDiscount || bulkDiscount < 0 || bulkDiscount > 100">
+                        <i class="fas fa-bolt"></i>
+                        Appliquer à tous les produits filtrés
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
